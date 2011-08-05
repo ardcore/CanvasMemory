@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <style>
+    #test_canvas {
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+  <body>
+  <canvas id="test_canvas" width="200" height="200"></canvas>
+   <script src="CanvasMemory.js"></script> 
+   <script>
+      // init
+      var canvas = document.querySelector('#test_canvas');
+      var ctx = canvas.getContext('2d');
+      var memctx = new CanvasMemory();
+      memctx.applyTo(ctx);
+
+      // some random canvas drawing methods,
+      // just to loose your coords
+
+      memctx.strokeStyle = "black";
+      memctx.fillStyle = "blue";
+      memctx.moveTo(10, 10);
+      memctx.lineTo(20, 20);
+      memctx.lineTo(100, 100);
+      memctx.stroke();
+      memctx.strokeStyle = "green";
+      memctx.beginPath();
+      memctx.rect(10, 10, 10, 10);
+      memctx.stroke();
+      memctx.scale(1.2, 1.2);
+      memctx.rotate(-.3);
+      memctx.moveTo(50, 50);
+      memctx.beginPath();
+      memctx.lineTo(5, 5);
+      memctx.lineTo(30, 30);
+      memctx.rect(30, 30, 10, 10);
+      memctx.closePath();
+      memctx.stroke();
+
+      // and now, if you'd like to get current coordinates...
+      var pos = memctx.getCoords();
+      console.log(pos);
+   </script>
+  </body>
+</html>
