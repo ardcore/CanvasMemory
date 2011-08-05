@@ -23,8 +23,9 @@ Usage:
 See also example.html
 
 TODO:
- - support createLinearGradient & createRadianGradient
- - test, test, test. jsperf benchmarks.
+
+- support createLinearGradient & createRadianGradient
+- test, test, test. jsperf benchmarks.
 
 MIT license.
  
