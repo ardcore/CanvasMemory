@@ -1,6 +1,7 @@
 /*
  * CanvasMemory - wrapper around canvas 2d context
- * adding 'getCoords' method.
+ * adding methods to access current transform matrix
+ * and drawing path.
  * 
  * Released under MIT license.
  *
@@ -10,7 +11,7 @@
 
 (function(global) {
 
-  function MatrixPattern() {
+  function MatrixIdentity() {
     return [
       [1, 0, 0],
       [0, 1, 0],
@@ -19,7 +20,7 @@
   }
 
   function mulMatrix(m1, m2) {
-    var res = new MatrixPattern(),
+    var res = new MatrixIdentity(),
         sum, x, y, z;
 
     for (x = 0; x < 3; x++) {
@@ -32,20 +33,6 @@
       }
     }
     return res;
-  }
-
-  // helper function - copies style-related properties of canvas
-  // TODO switch to setters?
-  function copyProps(base, target) {
-    var propList = [
-      'lineWidth'     , 'lineJoin'      , 'lineCap'     ,
-      'fillStyle'     , 'strokeStyle'   , 'globalAlpha' ,
-      'miterLimit'    , 'shadowBlur'    , 'shadowColor' ,
-      'shadowOffsetX' , 'shadowOffsetY'
-      ]
-    for (var i = 0; i < propList.length; i++) {
-      target[propList[i]] = base[propList[i]];
-    }
   }
 
   function isSane(matrix) {
@@ -62,13 +49,27 @@
   function storeMatrix(context, matrix) {
     if (isSane(matrix)) {
       context._storedMatrix = matrix;
+    } 
+  }
+
+  // helper function - copies style-related properties of canvas
+  // TODO switch to setters?
+  function copyProps(base, target) {
+    var propList = [
+      'lineWidth'     , 'lineJoin'      , 'lineCap'     ,
+      'fillStyle'     , 'strokeStyle'   , 'globalAlpha' ,
+      'miterLimit'    , 'shadowBlur'    , 'shadowColor' ,
+      'shadowOffsetX' , 'shadowOffsetY' , 'drawImage'
+      ]
+    for (var i = 0; i < propList.length; i++) {
+      target[propList[i]] = base[propList[i]];
     }
   }
 
   function CanvasMemory() {
     this.canvas = null;
     this.coords = {x:0, y:0};
-    this._storedMatrix = new MatrixPattern();
+    this._storedMatrix = new MatrixIdentity();
     this._stack = [];
     this._matrixStack = [];
   }
@@ -108,8 +109,16 @@
   }
   
   // public method - returns coordinates of x, y with applied transforms
-  CanvasMemory.prototype.getCoords = function(x, y) {
-    return this._getCoords(x || 0, y || 0);
+  CanvasMemory.prototype.getCurrentCoords = function(x, y) {
+    return this.coords;
+  }
+
+  CanvasMemory.prototype.getPointInCurrentMatrix = function(x, y) {
+    return this._getCoords(x, y);
+  }
+
+  CanvasMemory.prototype.getCurrentOrigin = function() {
+   return this.getPointInCurrentMatrix(0, 0); 
   }
 
   CanvasMemory.prototype._prefixMethod = function(target, methodName, fn) {
@@ -126,7 +135,7 @@
       var pos = this._getCoords(x, y);
       this._setCoords(pos);
     }
-    
+
     function proxySetCoordsLast() {
       var a = Array.prototype.slice.call(arguments, -2);   
       var pos = this._getCoords(a[0], a[1]);
@@ -142,7 +151,7 @@
       copyProps(this, state);
       this._stack.push(state);
       this._matrixStack.push(this._storedMatrix);
-      this._storedMatrix = mulMatrix(new MatrixPattern(), this._storedMatrix); 
+      this._storedMatrix = mulMatrix(new MatrixIdentity(), this._storedMatrix); 
     }
 
     function proxyRestore() {
@@ -242,15 +251,21 @@
 
   CanvasMemory.prototype._getCoords = function(x, y) {
     var m = this._storedMatrix;
-    return {
+    var s = {
       x: x * m[0][0] + y * m[1][0] + m[2][0],
       y: x * m[0][1] + y * m[1][1] + m[2][1]
     }
-
+    return s;
   }
 
   CanvasMemory.prototype._setCoords = function(coords) {
-    this.coords = coords;
+    this.coords.x = coords.x;
+    this.coords.y = coords.y;
+  }
+
+  CanvasMemory.prototype._updateCoords = function() {
+    var pos = this._getCoords(this.coords.x, this.coords.y);
+    this._setCoords(pos);
   }
 
   CanvasMemory.prototype._setX = function(val) {

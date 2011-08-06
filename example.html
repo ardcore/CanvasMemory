@@ -19,9 +19,9 @@
 
       // some random canvas drawing methods,
       // just to loose your coords
-
       memctx.strokeStyle = "black";
       memctx.fillStyle = "blue";
+      memctx.translate( canvas.width/2, canvas.height/2 );
       memctx.moveTo(10, 10);
       memctx.lineTo(20, 20);
       memctx.lineTo(100, 100);
@@ -41,8 +41,17 @@
       memctx.stroke();
 
       // and now, if you'd like to get current coordinates...
-      var pos = memctx.getCoords();
-      console.log(pos);
+      var pos = memctx.getCurrentCoords();
+      console.log("current drawing position:", pos);
+
+      // or current point of origin (0, 0)...
+      var origin = memctx.getCurrentOrigin();
+      console.log("current origin:", origin);
+
+      // or position of custom point (x, y) in current transform matrix ...
+      var point = memctx.getPointInCurrentMatrix(50, 50);
+      console.log("50, 50 in current transform matrix:", point);
+
    </script>
   </body>
 </html>

@@ -2,11 +2,21 @@
 CanvasMemory 
 ------------
 
-wrapper around canvas 2d context adding 'getCoords' method.
+wrapper around canvas 2d context adding methods which can be used to access
+current transform matrix and drawing path.
 Handful mostly in generative graphic, creative coding etc.
 
-Usage:
+License: MIT.
 
+API:
+- applyTo(context) - applies memory context on top of canvas context 
+- getCurrentCoords() - returns current drawing position with applied
+  tranforms
+- getCurrentOrigin() - return position of 0, 0 with applied transforms
+- getPointInCurrentMatrix(x, y) - returns position of x, y with applied
+  transforms
+
+Example:
     // init
     var canvas = document.querySelector('#test_canvas');
     var ctx = canvas.getContext('2d');
@@ -17,15 +27,16 @@ Usage:
     memctx.lineTo(20, 20);
     ...
     
-    // and now, if you'd like to get current coordinates...
-    memctx.getCoords();
+    memctx.getCurrentCoords();
+    memctx.getCurrentOrigin();
+    memctx.getPointInCurrentMatrix(5, 5);
 
 See also example.html
 
 TODO:
 
 - support createLinearGradient & createRadianGradient
+- check if some methods/props are missing
 - test, test, test. jsperf benchmarks.
 
-MIT license.
  
