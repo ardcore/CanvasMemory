@@ -41,4 +41,7 @@ TODO:
 - check if some methods/props are missing
 - test, test, test. jsperf benchmarks.
 
+Note: As it basically delegates each operation while duplicating some of matrix 
+calculations in the background, it's probably quite expensive. You should use it only if you really need to.
+
  
