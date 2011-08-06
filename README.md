@@ -18,6 +18,7 @@ API:
   transforms
 
 Example:
+
     // init
     var canvas = document.querySelector('#test_canvas');
     var ctx = canvas.getContext('2d');
