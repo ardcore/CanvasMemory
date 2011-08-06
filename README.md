@@ -2,13 +2,14 @@
 CanvasMemory 
 ------------
 
-wrapper around canvas 2d context adding methods which can be used to access
+wrapper around canvas 2d context adding methods to access
 current transform matrix and drawing path.
 Handful mostly in generative graphic, creative coding etc.
 
 License: MIT.
 
 API:
+
 - applyTo(context) - applies memory context on top of canvas context 
 - getCurrentCoords() - returns current drawing position with applied
   tranforms
