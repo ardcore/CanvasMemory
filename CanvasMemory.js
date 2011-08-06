@@ -108,15 +108,18 @@
     return target;
   }
   
-  // public method - returns coordinates of x, y with applied transforms
-  CanvasMemory.prototype.getCurrentCoords = function(x, y) {
+  // public method - returns current coordinates in the drawing path
+  CanvasMemory.prototype.getCurrentCoords = function() {
     return this.coords;
   }
 
+  // public method - returns position of x, y in current transform matrix
   CanvasMemory.prototype.getPointInCurrentMatrix = function(x, y) {
     return this._getCoords(x, y);
   }
 
+  // public method - sugar - returns position of 0, 0 in current transform
+  // matrix
   CanvasMemory.prototype.getCurrentOrigin = function() {
    return this.getPointInCurrentMatrix(0, 0); 
   }
