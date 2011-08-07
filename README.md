@@ -13,9 +13,11 @@ API:
 - applyTo(context) - applies memory context on top of canvas context 
 - getCurrentCoords() - returns current drawing position with applied
   tranforms
-- getCurrentOrigin() - return position of 0, 0 with applied transforms
+- getCurrentOrigin() - returns position of 0, 0 with applied transforms
 - getPointInCurrentMatrix(x, y) - returns position of x, y with applied
   transforms
+- getTransform() - returns transform as array [m11, m12, m21, m22, x, y]
+  (opposite of native setTransform())
 
 Example:
 
@@ -32,6 +34,7 @@ Example:
     memctx.getCurrentCoords();
     memctx.getCurrentOrigin();
     memctx.getPointInCurrentMatrix(5, 5);
+    memcts.getTransform();
 
 See also example.html
 

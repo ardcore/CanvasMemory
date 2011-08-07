@@ -107,6 +107,13 @@
     this._proxyMethods();
     return target;
   }
+
+  CanvasMemory.prototype.getTransform = function() {
+    
+    // public method - returns current transform
+    var m = this._storedMatrix;
+    return [ m[0][0], m[0][1], m[1][0], m[1][1], m[2][0], m[2][1] ];
+  }
   
   // public method - returns current coordinates in the drawing path
   CanvasMemory.prototype.getCurrentCoords = function() {

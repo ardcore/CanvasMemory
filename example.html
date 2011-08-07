@@ -52,6 +52,10 @@
       var point = memctx.getPointInCurrentMatrix(50, 50);
       console.log("50, 50 in current transform matrix:", point);
 
+      // or go low-level and simply getTransform
+      var transform = memctx.getTransform();
+      console.log(transform);
+
    </script>
   </body>
 </html>
